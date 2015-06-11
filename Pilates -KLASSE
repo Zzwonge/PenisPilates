@@ -1,0 +1,18 @@
+
+class Pilates extends Player {
+
+  Pilates (String aniName, int aniMaxFrames, String keyPattern) {
+    super(aniName, aniMaxFrames, keyPattern);
+  }
+
+  boolean update(char key) {
+    boolean updated = this.checkAndIncPatternIndex(key);
+
+    if (updated) {
+      this.inc();
+      return true;
+    } else {
+      return false;
+    }
+  }
+}
