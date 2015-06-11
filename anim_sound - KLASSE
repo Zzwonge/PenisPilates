@@ -1,0 +1,59 @@
+class Anim_Sound
+{
+  PImage backgroundPic;
+  int a = 6;
+  int x = 0;
+  int y = 0;
+  int[] keypressed = new int[1];
+  int keynumber = 0;
+
+
+  Anim_Sound() {
+
+    backgroundPic = loadImage("smBBG.png");
+  }
+
+  void draw() {
+
+    animation();
+    charChoose();
+    if (keypressed[keynumber]==0) {     
+      //PImage sprite = backgroundPic(x, y, 800, 640);
+      image(backgroundPic, 0, 0);
+    }
+  }
+
+  void animation() {
+
+    boolean menukey = true; 
+    if (key=='s') {
+
+      keypressed[keynumber]++;
+    } else {
+      menukey = false;
+    }
+
+
+    if (frameCount>24) {
+      frameCount=1;
+    }
+
+    if (keypressed[keynumber]>1) {
+      x = (frameCount-1)/a*800;
+
+      PImage sprite = backgroundPic.get(x, y, 800, 640);
+      image(sprite, 0, 0);
+    }
+  }
+
+  void charChoose() {
+    if (keyPressed) {
+      if (key=='y') {
+        keypressed[keynumber]++;
+      }
+      if (key=='x'){
+        keypressed[keynumber]+=2;
+      }
+    }
+  }
+}
