@@ -1,0 +1,137 @@
+//animation der figur
+
+//Bilder
+PImage tasteA;
+PImage tasteU;
+PImage tasteV;
+PImage win;
+PImage loose;
+PImage backGround;
+//zeichenketten sind eingebunden
+String allKeys= "";
+
+
+void setup() {
+
+  size(800, 640);
+
+  frameRate(24);
+  tasteA=loadImage("taste_a.PNG");
+  tasteU=loadImage("taste_u.PNG");
+  tasteV=loadImage("taste_v.PNG");
+  win=loadImage("win.png");
+  loose=loadImage("fail.png");
+  backGround=loadImage("smBBG.png");
+}
+
+void draw() {
+
+  image(backGround, 0, 0);
+  gameOver();
+  timer();
+  keyGraph();
+  keyrythm();
+
+
+  println("BILANZ//frames=", frames, "/zaehler=", counterKeys, "/i=", i, "/c=", c, "/fehler=", fail);
+  println(counterTime);
+  println(key);
+}
+
+//framezähler
+int frames = 0;
+//3-Sekunden-Zähler
+int counterTime = 0;
+//tastenzählVerbingung
+int counterKeys =0; 
+//tastenzähler
+int i = 0;
+//tasten
+char c;
+//rythmus
+String rythm1="auv";
+//fehlervariable  
+int fail = 0;
+
+////////////spiel ist gewonnen
+void gameOver() {
+  if (fail>=3) {
+    image(loose, 0, 0);
+  }
+
+  if (counterTime>=20) {
+    image(win, 0, 0);
+  }
+}
+
+
+//////Zeitzähler
+void timer() {
+  frames++;
+
+  if (frames==72) {
+    counterTime+=1;
+  }
+  //zählt 20 sekunden
+}
+
+
+
+//tasten werden gezeigt
+void keyGraph() {
+  if (i==0) {
+    image(tasteA, 0, 0);
+  }
+
+  if (i==1) {
+    image(tasteU, 0, 0);
+  }
+
+  if (i==2) {
+    image(tasteV, 0, 0);
+  }
+}
+
+void keyrythm() {  
+
+
+  ///////////////////////////////////////// Level 1//////////////////////////////////////
+
+  //tastenauswertung, wurde die richtige taste gedrückt?
+
+  if (keyPressed) {   
+    ////nein
+    if (i==0&&key!='a'||i==1&&key!='u'||i==2&&key!='v') {
+      fail++;
+      //fehler zeigen
+    }
+    ////ja
+    if (i==0&&key=='a'||i==1&&key=='u'||i==2&&key=='v') {
+      counterKeys++;
+      i++;
+      frames*=0;
+      //erfolg zeigen
+    }
+  }
+  //////es wurde keine taste gedrückt
+  else if (frames==71) {  
+    fail++;
+  }
+
+
+  //Tasten werden gezählt  
+  if (frames==72&&counterKeys<20) {
+    frames*=0;
+    counterKeys++;
+    i++;
+  }
+  //rythmus neu beginnen
+  if (i>2) {
+    i*=0;
+  }
+  //taste zuweisen
+  c = rythm1.charAt(i);
+
+  ///////////////////////////////////////// Level 2 /////////////////////////////////////
+  ///////////////////////////////////////// Level 3 /////////////////////////////////////
+}
