@@ -1,0 +1,66 @@
+class Anim_Sound 
+{
+  /*import processing.video.*;
+   Movie myMovie;
+   myMov = new Movie(this, "Nicki Minaj - Anaconda.mp4");
+   myMov.play();*/
+
+  PImage backgroundPic;
+  PImage startMenu;
+  PImage bitch;
+
+  int a = 6;
+  //punkt x des bg_bildes
+  int x = 0;
+  //punkt y des bg_bildes
+  int y = 0;
+  int[] keypressed = new int[1];
+  int keynumber = 0;
+
+  
+ 
+
+
+  Anim_Sound() {
+  //bilder und filme
+    backgroundPic = loadImage("smBBG.png");
+    startMenu = loadImage("start_menu.png");
+    bitch = loadImage("bitchAni.png");
+  
+  }
+
+  void draw() {
+    
+    animation();   
+   
+    if (keypressed[keynumber]==0) {
+
+      image(backgroundPic, 0, 0);
+      image(startMenu, 0, 0);
+    }
+    println(keynumber);
+  }
+
+
+  void animation() {
+    //drücke start   
+    if (key=='s') {
+      keypressed[keynumber]++;
+    }
+
+    if (frameCount>24) {
+      frameCount=1;
+    }
+
+    //animation hintergund
+    if (keypressed[keynumber]>1) {
+      x = (frameCount-1)/a*800;
+      //hintergrund animation
+      PImage sprite = backgroundPic.get(x, y, 800, 640);
+      image(sprite, 0, 0);
+      //sound hintergund/bg
+    }
+  }
+
+  
+}
