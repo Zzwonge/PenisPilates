@@ -1,41 +1,64 @@
-//animation der figur
-
+//animation und sound
+Anim_Sound anim_sound;
 //Bilder
 PImage tasteA;
 PImage tasteU;
 PImage tasteV;
+PImage heart;
+PImage right;
+PImage failed;
 PImage win;
 PImage loose;
-PImage backGround;
 //zeichenketten sind eingebunden
 String allKeys= "";
+//sound
+import ddf.minim.*;
+// Instanz der minim Bibliothek
+Minim minim;
+// Instanz die das geladene Audiodokument reprÃ¤sentiert
+AudioPlayer rightKey;
+AudioPlayer falseKey;
+int v=1;
+AudioPlayer bgSound;
+//startvariable
+int s = 0;
 
 
 void setup() {
 
   size(800, 640);
 
+  anim_sound = new Anim_Sound();
+
   frameRate(24);
+
   tasteA=loadImage("taste_a.PNG");
   tasteU=loadImage("taste_u.PNG");
   tasteV=loadImage("taste_v.PNG");
+  heart=loadImage("herz.PNG");
+  right=loadImage("right.PNG");
+  failed=loadImage("fehler.PNG");
   win=loadImage("win.png");
   loose=loadImage("fail.png");
-  backGround=loadImage("smBBG.png");
+
+  minim = new Minim (this);
+  rightKey = minim.loadFile ("peitschHieb.wav");
+  falseKey = minim.loadFile ("schlag.wav");
+  bgSound = minim.loadFile ("song_1.wav");
 }
 
 void draw() {
 
-  image(backGround, 0, 0);
-  gameOver();
-  timer();
-  keyGraph();
-  keyrythm();
-
-
-  println("BILANZ//frames=", frames, "/zaehler=", counterKeys, "/i=", i, "/c=", c, "/fehler=", fail);
-  println(counterTime);
-  println(key);
+  anim_sound.draw();
+  bgSound();
+  if (s==1) {
+    gameOver();
+    timer();     
+    keyrythm(); 
+    keyGraph();
+    life();
+  }
+  println("BILANZ//frames=", frames, "/zaehler=", counterKeys, "/v-variable", v, "/i=", i, "/c=", c, "/key=", key, "/fehler=", fail);
 }
 
 //framezähler
@@ -72,12 +95,20 @@ void timer() {
   if (frames==72) {
     counterTime+=1;
   }
-  //zählt 20 sekunden
+  //zählt 60 sekunden
+}
+
+//hintergundmusik 
+void bgSound() {
+//drücke s um den sound zu starten
+  if (key=='s') {
+    bgSound.play();
+    s=1;
+  }
 }
 
 
-
-//tasten werden gezeigt
+//tasten werden gezeigt 
 void keyGraph() {
   if (i==0) {
     image(tasteA, 0, 0);
@@ -101,22 +132,48 @@ void keyrythm() {
 
   if (keyPressed) {   
     ////nein
-    if (i==0&&key!='a'||i==1&&key!='u'||i==2&&key!='v') {
+    if (i==0&&key!='a'||i==1&&key!='u'||i==2&&key!='v'){
+      if(v==1){
       fail++;
-      //fehler zeigen
-    }
+      ////fehler zeigen
+      //mit bild
+      image(failed, 0, 0);
+      //mit sound
+      //mit sound
+      v=0;
+      falseKey.loop (0);
+    } else {
+      v=1;
+    }}
+
     ////ja
-    if (i==0&&key=='a'||i==1&&key=='u'||i==2&&key=='v') {
+    if (i==0&&key=='a'||i==1&&key=='u'||i==2&&key=='v'&&v==1) {
       counterKeys++;
       i++;
       frames*=0;
-      //erfolg zeigen
+      ////erfolg zeigen
+      //mit bild
+      image(right, 0, 0);
+      //mit sound
+      v=0;
+      rightKey.loop (0);
+    } else {
+      v=1;
     }
   }
+
   //////es wurde keine taste gedrückt
-  else if (frames==71) {  
+  if (frames==71) {  
     fail++;
+    //fehler zeigen
+    image(failed, 0, 0);
+    //fehler sound
+    v=0;
+    falseKey.loop (0);
+  } else {
+    v=1;
   }
+
 
 
   //Tasten werden gezählt  
@@ -131,7 +188,22 @@ void keyrythm() {
   }
   //taste zuweisen
   c = rythm1.charAt(i);
+}
+///////////////////////////////////////// Level 2 /////////////////////////////////////
+///////////////////////////////////////// Level 3 /////////////////////////////////////
 
-  ///////////////////////////////////////// Level 2 /////////////////////////////////////
-  ///////////////////////////////////////// Level 3 /////////////////////////////////////
+
+void life() {
+  if (fail==0) {
+    image(heart, 20, 20);
+    image(heart, 75, 20);
+    image(heart, 130, 20);
+  }
+  if (fail==1) {
+    image(heart, 20, 20);
+    image(heart, 75, 20);
+  }
+  if (fail==2) {
+    image(heart, 20, 20);
+  }
 }
